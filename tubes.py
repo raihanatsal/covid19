@@ -10,8 +10,6 @@ from bokeh.resources import CDN
 st.set_page_config(page_title='Final Project')
 
 st.header('Final Project - Visualisasi Data')
-st.subheader('Ricardo Hamonangan - 1301204201')
-st.subheader('Olaza Aurora Syafira   - 1301202610')
 
 # Baca CSV
 df = pd.read_csv("datasetfix.csv")
