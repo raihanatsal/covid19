@@ -74,17 +74,17 @@ date_range_slider.js_link("value", bokeh_p.x_range, "start", attr_selector=0)
 date_range_slider.js_link("value", bokeh_p.x_range, "end", attr_selector=1)
 
 # Bar Plot
-menu2 = Select(options=Location_list, value='Jawa Barat', title='Location')  
-bokeh_b = figure(x_axis_label='Date', y_axis_label='Total Active Cases', y_axis_type="linear",
+menu = Select(options=Location_list, value='Jawa Barat', title='Location')  
+bokeh_p = figure(x_axis_label='Date', y_axis_label='Total Active Cases', y_axis_type="linear",
                  x_axis_type="datetime")  
-bokeh_b.vbar(x='Date', y='Total Cases', color='green', legend_label="Total Kasus", source=Curr)
-bokeh_b.vbar(x='Date', y='Total Deaths', color='black', legend_label="Total Kematian", source=Curr)
-bokeh_b.vbar(x='Date', y='Total Recovered', color='blue', legend_label="Total Sembuh", source=Curr)
-bokeh_b.vbar(x='Date', y='Total Active Cases', color='red', legend_label="Total Kasus Aktif", source=Curr)
-bokeh_b.legend.location = "top_right"
+bokeh_p.vbar(x='Date', y='Total Cases', color='green', legend_label="Total Kasus", source=Curr)
+bokeh_p.vbar(x='Date', y='Total Deaths', color='black', legend_label="Total Kematian", source=Curr)
+bokeh_p.vbar(x='Date', y='Total Recovered', color='blue', legend_label="Total Sembuh", source=Curr)
+bokeh_p.vbar(x='Date', y='Total Active Cases', color='red', legend_label="Total Kasus Aktif", source=Curr)
+bokeh_p.legend.location = "top_right"
 
-bokeh_b.add_tools(HoverTool(
-    tooltips2=[
+bokeh_p.add_tools(HoverTool(
+    tooltips=[
         ('Total Kasus', '@{Total Cases}'),
         ('Total Kematian', '@{Total Deaths}'),
         ('Total Sembuh', '@{Total Recovered}'),
@@ -92,16 +92,16 @@ bokeh_b.add_tools(HoverTool(
   
     ],
 
-    mode2='mouse'
+    mode='mouse'
 ))
 
-menu2.js_on_change('value', callback)
+menu.js_on_change('value', callback)
 
-date_range_slider2 = DateRangeSlider(value=(min(df['Date']), max(df['Date'])), start=min(df['Date']),
+date_range_slider = DateRangeSlider(value=(min(df['Date']), max(df['Date'])), start=min(df['Date']),
                                    end=max(df['Date']))
 
-date_range_slider2.js_link("value", bokeh_b.x_range, "start", attr_selector=0)
-date_range_slider2.js_link("value", bokeh_b.x_range, "end", attr_selector=1)
+date_range_slider.js_link("value", bokeh_p.x_range, "start", attr_selector=0)
+date_range_slider.js_link("value", bokeh_p.x_range, "end", attr_selector=1)
 
 # Render plot Bokeh menggunakan Streamlit
 st.bokeh_chart(column(menu, date_range_slider, bokeh_p, bokeh_p))
