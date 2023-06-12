@@ -19,7 +19,7 @@ Location_list = list(df['Location'].unique())
 df['Date'] = pd.to_datetime(df['Date'])
 
 cols1 = df.loc[:, ['Location', 'Date', 'Total Active Cases', 'Total Deaths', 'Total Recovered', 'Total Cases']]
-cols2 = cols1[cols1['Location'] == 'DKI Jakarta']
+cols2 = cols1[cols1['Location'] == 'Jawa Barat']
 
 Overall = ColumnDataSource(data=cols1)
 Curr = ColumnDataSource(data=cols2)
@@ -47,7 +47,7 @@ callback = CustomJS(
     """
 )
 
-menu = Select(options=Location_list, value='DKI Jakarta', title='Location')  
+menu = Select(options=Location_list, value='Jawa Barat', title='Location')  
 bokeh_p = figure(x_axis_label='Date', y_axis_label='Total Active Cases', y_axis_type="linear",
                  x_axis_type="datetime")  
 bokeh_p.line(x='Date', y='Total Cases', color='green', legend_label="Total Kasus", source=Curr)
