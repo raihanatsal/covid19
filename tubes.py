@@ -18,7 +18,7 @@ Location_list = list(df['Location'].unique())
 
 df['Date'] = pd.to_datetime(df['Date'])
 
-cols1 = df.loc[:, ['Location', 'Date', 'Total Active Cases', 'Total Deaths', 'Total Recovered', 'Total Cases', 'Population']]
+cols1 = df.loc[:, ['Location', 'Date', 'Total Active Cases', 'Total Deaths', 'Total Recovered', 'Total Cases']]
 cols2 = cols1[cols1['Location'] == 'Jawa Barat']
 
 Overall = ColumnDataSource(data=cols1)
@@ -33,15 +33,14 @@ callback = CustomJS(
         sc.data['Total Deaths']=[]
         sc.data['Total Recovered']=[]
         sc.data['Total Active Cases']=[]
-        sc.data['Population']=[]
+   
         for(var i = 0; i <= source.get_length(); i++){
             if (source.data['Location'][i] == f){
                 sc.data['Date'].push(source.data['Date'][i])
                 sc.data['Total Cases'].push(source.data['Total Recovered'][i])
                 sc.data['Total Deaths'].push(source.data['Total Recovered'][i])
                 sc.data['Total Recovered'].push(source.data['Total Recovered'][i])
-                sc.data['Total Active Cases'].push(source.data['Total Active Cases'][i])
-                sc.data['Population'].push(source.data['Population'][i])
+                sc.data['Total Active Cases'].push(source.data['Total Active Cases'][i])     
             }
         }
 
@@ -56,7 +55,6 @@ bokeh_p.line(x='Date', y='Total Cases', color='green', legend_label="Total Kasus
 bokeh_p.line(x='Date', y='Total Deaths', color='black', legend_label="Total Kematian", source=Curr)
 bokeh_p.line(x='Date', y='Total Recovered', color='blue', legend_label="Total Sembuh", source=Curr)
 bokeh_p.line(x='Date', y='Total Active Cases', color='red', legend_label="Total Kasus Aktif", source=Curr)
-bokeh_p.line(x='Date', y='Population', color='purple', legend_label="Populasi", source=Curr)
 bokeh_p.legend.location = "top_right"
 
 bokeh_p.add_tools(HoverTool(
@@ -65,7 +63,7 @@ bokeh_p.add_tools(HoverTool(
         ('Total Kematian', '@{Total Deaths}'),
         ('Total Sembuh', '@{Total Recovered}'),
         ('Total Kasus Aktif', '@{Total Active Cases}'),
-        ('Populasi', '@{Population}'),
+  
     ],
 
     mode='mouse'
