@@ -10,18 +10,16 @@ from bokeh.resources import CDN
 st.set_page_config(page_title='Final Project')
 
 st.header('Final Project - Visualisasi Data')
-st.subheader('Ricardo Hamonangan - 1301204201')
-st.subheader('Olaza Aurora Syafira   - 1301202610')
 
 # Baca CSV
-df = pd.read_csv("datasetfix.csv")
+df = pd.read_csv("Covid19Indonesia.csv")
 
 Location_list = list(df['Location'].unique())
 
 df['Date'] = pd.to_datetime(df['Date'])
 
 cols1 = df.loc[:, ['Location', 'Date', 'Total Active Cases', 'Total Deaths', 'Total Recovered', 'Total Cases']]
-cols2 = cols1[cols1['Location'] == 'DKI Jakarta']
+cols2 = cols1[cols1['Location'] == 'Jawa Barat']
 
 Overall = ColumnDataSource(data=cols1)
 Curr = ColumnDataSource(data=cols2)
@@ -35,13 +33,14 @@ callback = CustomJS(
         sc.data['Total Deaths']=[]
         sc.data['Total Recovered']=[]
         sc.data['Total Active Cases']=[]
+   
         for(var i = 0; i <= source.get_length(); i++){
             if (source.data['Location'][i] == f){
                 sc.data['Date'].push(source.data['Date'][i])
                 sc.data['Total Cases'].push(source.data['Total Recovered'][i])
                 sc.data['Total Deaths'].push(source.data['Total Recovered'][i])
                 sc.data['Total Recovered'].push(source.data['Total Recovered'][i])
-                sc.data['Total Active Cases'].push(source.data['Total Active Cases'][i])
+                sc.data['Total Active Cases'].push(source.data['Total Active Cases'][i])     
             }
         }
 
@@ -49,7 +48,7 @@ callback = CustomJS(
     """
 )
 
-menu = Select(options=Location_list, value='DKI Jakarta', title='Location')  
+menu = Select(options=Location_list, value='Jawa Barat', title='Location')  
 bokeh_p = figure(x_axis_label='Date', y_axis_label='Total Active Cases', y_axis_type="linear",
                  x_axis_type="datetime")  
 bokeh_p.line(x='Date', y='Total Cases', color='green', legend_label="Total Kasus", source=Curr)
@@ -64,6 +63,7 @@ bokeh_p.add_tools(HoverTool(
         ('Total Kematian', '@{Total Deaths}'),
         ('Total Sembuh', '@{Total Recovered}'),
         ('Total Kasus Aktif', '@{Total Active Cases}'),
+  
     ],
 
     mode='mouse'
@@ -76,7 +76,16 @@ date_range_slider = DateRangeSlider(value=(min(df['Date']), max(df['Date'])), st
 
 date_range_slider.js_link("value", bokeh_p.x_range, "start", attr_selector=0)
 date_range_slider.js_link("value", bokeh_p.x_range, "end", attr_selector=1)
-layout = column(menu, date_range_slider, bokeh_p)
+
+# Bar Plot
+bar_data = df.groupby('Location').sum().reset_index()
+
+bar_plot = figure(x_range=bar_data['Location'], y_axis_label='Total Cases',
+                  title='Total Kasus COVID-19 Berdasarkan Lokasi', toolbar_location=None, width=600, height=400)
+bar_plot.vbar(x='Location', top='Total Cases', source=ColumnDataSource(bar_data),
+              width=0.9, color='green')
+
+bar_plot.xaxis.major_label_orientation = 45
 
 # Render plot Bokeh menggunakan Streamlit
-st.bokeh_chart(layout)
+st.bokeh_chart(column(menu, date_range_slider, bokeh_p, bar_plot))
