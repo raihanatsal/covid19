@@ -12,7 +12,7 @@ st.set_page_config(page_title='Final Project')
 st.header('Final Project - Visualisasi Data')
 
 # Baca CSV
-df = pd.read_csv("datasetfix.csv")
+df = pd.read_csv("Covid19Indonesia.csv")
 
 Location_list = list(df['Location'].unique())
 
