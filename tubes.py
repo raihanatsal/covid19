@@ -32,7 +32,7 @@ callback = CustomJS(
         sc.data['Total Recovered']=[]
         sc.data['Total Active Cases']=[]
    
-        for(var i = 0; i <= source.get_length(); i++){
+        for(var i = 0; i < source.get_length(); i++){
             if (source.data['Location'][i] == f){
                 sc.data['Date'].push(source.data['Date'][i])
                 sc.data['Total Cases'].push(source.data['Total Cases'][i])
@@ -93,8 +93,8 @@ bar_plot.add_tools(HoverTool(
     line_policy='nearest',
 ))
 
-bar_plot.js_on_event('tap', CustomJS(args=dict(source=bar_plot.source), code="""
-    const selected_index = cb_data.index['1d'].indices[0];
+bar_plot.js_on_event('tap', CustomJS(args=dict(source=bar_plot.select(ColumnDataSource)), code="""
+    const selected_index = cb_obj.selected['1d'].indices[0];
     if (selected_index !== undefined) {
         const selected_location = source.data['Location'][selected_index];
         menu.value = selected_location;
